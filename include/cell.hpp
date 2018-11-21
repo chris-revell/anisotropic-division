@@ -14,11 +14,11 @@
 class cell {
 private:
 public:
-  cell(const float& initialx,const float& initialy);
-  arma::mat pos;
-  arma::mat v;
-  float     age;
-  ~cell();
+  cell(const float& initialx,const float& initialy); // Constructor takes initial cell position in x and y dimensions
+  arma::mat pos; // Cell position
+  arma::mat v;   // Cell velocity
+  float     age; // Cell age
+  ~cell();       // Destructor
 protected:
 
 };

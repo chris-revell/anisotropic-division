@@ -1,21 +1,21 @@
 # Compile with Intel c++ compiler
 
-CC=icpc
-CFlags=-c -Wall -std=c++11 -g -O0
-CLibs=-larmadillo
-LDFLAGS=-ggdb -std=c++11 -O0 -Wall
+CC := icpc# This is the main compiler
+SRCDIR := src
+BUILDDIR := build
+TARGET := anisotropicdivision
 
-all: anisotropicdivision clean
+SRCEXT := cpp
+SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+CFLAGS := -c -Wall -std=c++11 -g -O0 # -Wall
+LIB :=
+INC := -I include
 
-anisotropicdivision: main.o cell.o
-	$(CC) main.o cell.o -o anisotropicdivision $(LDFLAGS)
+$(TARGET): $(OBJECTS)
+	@echo " Linking..."
+	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
 
-main: main.cpp
-	$(CC) $(CFlags) main.cpp $(CLibs)
-
-cell: cell.cpp
-	$(CC) $(CFlags) cell.cpp $(CLibs)
-
-clean:
-	rm *.o
-	rm *.gch
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<

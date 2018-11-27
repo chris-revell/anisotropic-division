@@ -6,16 +6,10 @@
 #include <iostream>
 #include <cell.hpp>
 #include <MorseForce.hpp>
+#include <PositionToIndex.hpp>
 
 using namespace std;
 using namespace arma;
-
-// Function to return index of a given cell position in a given dimension (dim) within the background lattice of size Ng and width Ng*griddim
-int PositionToIndex(const cell& Cell,const float& griddim,const int& Ng,const int& dim){
-  int index;
-  index = floor((Cell.pos(dim)+(Ng*griddim)/2)/griddim);
-  return index;
-}
 
 // Subroutine to test all cells in vector Cells and determine whether any are older than the cell cycle time.
 // Any cells older than the cell cycle time undergo division. The two daughter cells have age=0
@@ -48,7 +42,7 @@ int main(){
   int Nc              = 1;
   int ix,iy;                            // Background grid indices
   float t             = 0;              // System clock
-  float dt            = 0.1;              // Time interval
+  float dt            = 0.1;            // Time interval
   float t_max         = 100;            // Total run time for system
   float cellcycletime = 10;             // Age of cell when division is triggered
   cube gridcells      = cube(Ng,Ng,500,fill::zeros);// Labels of cells in each backkground grid location

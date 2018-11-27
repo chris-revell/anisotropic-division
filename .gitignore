@@ -33,4 +33,4 @@
 
 *.png
 *.gif
-output/*.txt
+output/*

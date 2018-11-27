@@ -4,36 +4,11 @@
 #include <armadillo>
 #include <vector>
 #include <iostream>
-#include "cell.hpp"
+#include <cell.hpp>
+#include <MorseForce.hpp>
 
 using namespace std;
 using namespace arma;
-
-// Subroutine to calculate the force exerted by the Morse potential between two given cells.
-void MorseForce(cell& Cell1,cell& Cell2){
-  float dx,dy,r,F,vx,vy;
-  float De    = 1; // Morse potential parameters
-  float a     = 1; //
-  float re    = 1; //
-  float gamma = 1; // Drag factor
-  float expfactor;
-
-  // Calculate x and y displacements between the 2 given cells
-  dx = Cell1.pos(0) - Cell2.pos(0);
-  dy = Cell1.pos(1) - Cell2.pos(1);
-  // Calculate distance between cells from x and y displacements
-  r = sqrt(pow(dx,2)+pow(dy,2));
-  // Use distance to evaluate derivative of Morse potential to give force F
-  expfactor = exp(-a*(r-re));
-  F = 2*a*De*(expfactor-pow(expfactor,2));
-  // Overdamped Langevin => velocity = drag factor * force
-  vx = gamma*F*dx/r;
-  vy = gamma*F*dy/r;
-  Cell1.v(0) = Cell1.v(0)+vx; // Velocity components from forces between different cells sum linearly
-  Cell1.v(1) = Cell1.v(1)+vy;
-  Cell2.v(0) = Cell2.v(0)-vx;
-  Cell2.v(1) = Cell2.v(1)-vy;
-}
 
 // Function to return index of a given cell position in a given dimension (dim) within the background lattice of size Ng and width Ng*griddim
 int PositionToIndex(const cell& Cell,const float& griddim,const int& Ng,const int& dim){
@@ -47,9 +22,12 @@ int PositionToIndex(const cell& Cell,const float& griddim,const int& Ng,const in
 // and are always separated by 2* typical cell radius.
 void CellDivision(vector<cell>& Cells,int& Nc,const float& cellradius,const float& cellcycletime){
   float theta;
+  default_random_engine generator;
+  normal_distribution<double> distribution(0.0,0.01);
   for (int ii=0;ii<Nc;ii++){
     if (Cells[ii].age>cellcycletime){
-      theta = 2*M_PI*rand()/RAND_MAX;
+      //theta = 2*M_PI*rand()/RAND_MAX;
+      theta = 2*M_PI*distribution(generator);
       Cells.push_back(cell(Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta)));
       Cells[ii].pos(0) = Cells[ii].pos(0)-cellradius*cos(theta);
       Cells[ii].pos(1) = Cells[ii].pos(1)-cellradius*sin(theta);
@@ -70,10 +48,10 @@ int main(){
   int Nc              = 1;
   int ix,iy;                            // Background grid indices
   float t             = 0;              // System clock
-  float dt            = 1;              // Time interval
+  float dt            = 0.1;              // Time interval
   float t_max         = 100;            // Total run time for system
   float cellcycletime = 10;             // Age of cell when division is triggered
-  cube gridcells      = cube(Ng,Ng,100,fill::zeros);// Labels of cells in each backkground grid location
+  cube gridcells      = cube(Ng,Ng,500,fill::zeros);// Labels of cells in each backkground grid location
   mat gridcount       = mat(Ng,Ng,fill::zeros);     // Array containing the number of cells in each background grid location
 
   // Open data output files.
@@ -122,16 +100,20 @@ int main(){
       Cells[ii].age = Cells[ii].age+dt;
     }
 
-    // Update all cell positions according to cell velocities and write positions to file
-    for (int ii=0;ii<Nc;ii++){
-      Cells[ii].pos = Cells[ii].pos+dt*Cells[ii].v;
-      outfile1 << Cells[ii].pos(0) << " " << Cells[ii].pos(1) << endl;
+    if (fmod(t,10.0)<dt){
+      cout << t << " " << fmod(t,10.0) << endl;
+      // Update all cell positions according to cell velocities and write positions to file
+      for (int ii=0;ii<Nc;ii++){
+        Cells[ii].pos = Cells[ii].pos+dt*Cells[ii].v;
+        outfile1 << Cells[ii].pos(0) << " " << Cells[ii].pos(1) << endl;
+      }
+      // Write cell count at this time interval to file
+      outfile2 << Nc << endl;
     }
-    // Write cell count at this time interval to file
-    outfile2 << Nc << endl;
+
     // Increment time and write time to command line
     t=t+dt;
-    cout << t << endl;
+    //cout << t << endl;
   }
 
   return 0;

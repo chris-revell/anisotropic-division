@@ -4,7 +4,7 @@ import os
 
 data = np.genfromtxt("output/cellpositions.txt")
 ncells = np.genfromtxt("output/cellcount.txt",dtype=int)
-xmax=100
+xmax=60
 drawn = 0
 for step in range(ncells.shape[0]):
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))

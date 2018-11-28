@@ -12,6 +12,6 @@
 #include <armadillo>
 #include <cell.hpp>
 
-void MorseForce(cell& Cell1,cell& Cell2);
+void MorseForce(cell& Cell1,cell& Cell2,const float& cellcycletime,const float& cellradius);
 
 #endif /* MorseForce_hpp */

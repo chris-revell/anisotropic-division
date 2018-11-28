@@ -4,7 +4,7 @@ import os
 
 data = np.genfromtxt("output/cellpositions.txt")
 ncells = np.genfromtxt("output/cellcount.txt",dtype=int)
-xmax=60
+xmax=50
 drawn = 0
 for step in range(ncells.shape[0]):
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
@@ -19,5 +19,4 @@ for step in range(ncells.shape[0]):
     ax.tick_params(axis='y',which='both',left=False,right=False,labelleft=False)
     fig.savefig("output/test{:05d}".format(step))
     plt.close()
-os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;")
-# rm output/*.png")
+os.system("convert -delay 2 -loop 0 output/*.png output/animated.gif;rm output/*.png")

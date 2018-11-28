@@ -23,7 +23,7 @@ void CellDivision(vector<cell>& Cells,int& Nc,const float& cellradius,const floa
   for (int ii=0;ii<Nc;ii++){
     if (Cells[ii].age>cellcycletime){
       //theta = 2*M_PI*rand()/RAND_MAX;
-      theta = 2*M_PI*distribution(generator);
+      theta = 2*M_PI*distribution(generator);      
       Cells.push_back(cell(Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta)));
       Cells[ii].pos(0) = Cells[ii].pos(0)-cellradius*cos(theta);
       Cells[ii].pos(1) = Cells[ii].pos(1)-cellradius*sin(theta);

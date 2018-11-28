@@ -21,7 +21,7 @@ void GridUpdate(vector<cell>& Cells, mat& gridcount, cube& gridcells, const int&
   // Add the cell label to the corresponding matrix component and increment the count of cells at that location
   for (int ii=0;ii<Nc;ii++){
     ix = PositionToIndex(Cells[ii],griddim,Ng,0);
-    iy = PositionToIndex(Cells[ii],griddim,Ng,1);
+    iy = PositionToIndex(Cells[ii],griddim,Ng,1);    
     gridcells(ix,iy,gridcount(ix,iy))=ii;
     gridcount(ix,iy)++;
     Cells[ii].v.zeros(); // Set all cell velocities to zero while we're at it

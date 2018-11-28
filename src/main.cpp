@@ -8,6 +8,7 @@
 #include <MorseForce.hpp>
 #include <PositionToIndex.hpp>
 #include <CellDivision.hpp>
+#include <GridUpdate.hpp>
 
 using namespace std;
 using namespace arma;
@@ -41,17 +42,7 @@ int main(){
     // Divide all cells with age greater than cell cycle time.
     CellDivision(Cells,Nc,cellradius,cellcycletime);
 
-    // Refresh the gridcount array
-    gridcount.zeros();
-    // For each cell, find the background lattice location corresponding to its position
-    // Add the cell label to the corresponding matrix component and increment the count of cells at that location
-    for (int ii=0;ii<Nc;ii++){
-      ix = PositionToIndex(Cells[ii],griddim,Ng,0);
-      iy = PositionToIndex(Cells[ii],griddim,Ng,1);
-      gridcells(ix,iy,gridcount(ix,iy))=ii;
-      gridcount(ix,iy)++;
-      Cells[ii].v.zeros(); // Set all cell velocities to zero while we're at it
-    }
+    GridUpdate(Cells,gridcount,gridcells,Nc,Ng,griddim);
 
     // For all cells, find corresponding background lattice grid location.
     // Find all cells in all surrounding lattice points.

@@ -41,10 +41,13 @@ int main(){
     // Divide all cells with age greater than cell cycle time.
     CellDivision(Cells,Nc,cellradius,cellcycletime);
 
+    // Update background grid for identifying nearest neighbours.
     GridUpdate(Cells,gridcount,gridcells,Nc,Ng,griddim);
 
+    // Calculate forces between identified nearest neighbours and hence cell velocities.
     CalculateForces(Cells,gridcount,gridcells,griddim,Ng,Nc,cellcycletime,cellradius,dt);
 
+    // Output cell positions to file every 100s.
     if (fmod(t,100)<dt){
       cout << t << endl;
       // Update all cell positions according to cell velocities and write positions to file

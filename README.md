@@ -1,6 +1,6 @@
 # anisotropic-division
 
-Compile with `make`
+Compile with `make`. If you do not have the Intel C++ compiler, edit the `Makefile` line 8 from `CC := icpc` to `CC := g++`
 
 Run with `./anisotropicdivision`
 

@@ -16,6 +16,7 @@
 using namespace std;
 using namespace arma;
 
+// Subroutine to identify neighbouring cells and calculate forces between them. 
 // For all cells, find corresponding background lattice grid location.
 // Find all cells in all surrounding lattice points.
 // Apply forces between those cells and the cell under consideration.
@@ -24,20 +25,25 @@ void CalculateForces(vector<cell>& Cells,const mat& gridcount,const cube& gridce
   int ix,iy;      // Background grid indices
   int ii,jj,kk,ll;// Loop counters
   for (int ii=0;ii<Nc;ii++){
+    // Find grid indices for position of cell ii
     ix = PositionToIndex(Cells[ii],griddim,Ng,0);
     iy = PositionToIndex(Cells[ii],griddim,Ng,1);
+    // Neighbouring cells exist in neighbouring grid locations
     for (int jj=-1;jj<2;jj++){
       for (int kk=-1;kk<2;kk++){
         if (((ix+jj)>=Ng)||((ix+jj)<0)||((iy+kk)>=Ng)||((iy+kk)<0)){ // Exclude lattice edges
         }else{
           for (int ll=0;ll<gridcount(ix+jj,iy+kk);ll++){
+            // Loop over all cells in neighbouring grid location. Number of cells at location stored in gridcount, labels stored in gridcells.
             if (gridcells(ix+jj,iy+kk,ll)!=ii){ // Do not attempt to find forces between a cell and itself
+              // Calculate forces between cell ii and cells in neighbouring grid locations.
               MorseForce(Cells[ii],Cells[gridcells(ix+jj,iy+kk,ll)],cellcycletime,cellradius);
             }else{}
           }
         }
       }
     }
+    // Increment cell age.
     Cells[ii].age = Cells[ii].age+dt;
   }
 }

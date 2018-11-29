@@ -19,14 +19,13 @@ int main(){
   ofstream outfile1;                    // Data file
   ofstream outfile2;                    // Data file
   float cellradius    = 1;              // Typical cell radius
-  //float r_int_max     = 1.5*cellradius; // Maximum interaction radius for inter-cell forces
-  float griddim       = 2*cellradius;//r_int_max;      // Spatial size of each background grid location
+  float griddim       = 1.5*sqrt(2)*cellradius;   // Spatial size of each background grid location
   int Ng              = 512;            // Dimensions of background grid
   int Nc;                               // Number of cells in the system
   float t             = 0;              // System clock
   float dt            = 0.01;           // Time interval
-  float t_max         = 1000;           // Total run time for system
-  float cellcycletime = 100;            // Age of cell when division is triggered
+  float t_max         = 100000;          // Total run time for system
+  float cellcycletime = 10000;           // Age of cell when division is triggered
   cube gridcells      = cube(Ng,Ng,500,fill::zeros);// Labels of all cells in each background grid location
   mat gridcount       = mat(Ng,Ng,fill::zeros);     // Array containing the number of cells in each background grid location
 
@@ -46,7 +45,7 @@ int main(){
 
     CalculateForces(Cells,gridcount,gridcells,griddim,Ng,Nc,cellcycletime,cellradius,dt);
 
-    if (fmod(t,1)<dt){
+    if (fmod(t,100)<dt){
       cout << t << endl;
       // Update all cell positions according to cell velocities and write positions to file
       for (int ii=0;ii<Nc;ii++){

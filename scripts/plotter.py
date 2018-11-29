@@ -19,4 +19,4 @@ for step in range(ncells.shape[0]):
     ax.tick_params(axis='y',which='both',left=False,right=False,labelleft=False)
     fig.savefig("output/test{:05d}".format(step))
     plt.close()
-os.system("convert -delay 2 -loop 0 output/*.png output/animated.gif;rm output/*.png")
+os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")

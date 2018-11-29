@@ -15,6 +15,7 @@
 #include <armadillo>
 #include <MorseForce.hpp>
 
+// Subroutine to identify neighbouring cells and calculate forces between them. 
 void CalculateForces(std::vector<cell>& Cells,const arma::mat& gridcount,const arma::cube& gridcells,const float& griddim,const int& Ng,const int& Nc,const float& cellcycletime,const float& cellradius,const float& dt);
 
 #endif /* CalculateForces_hpp */

@@ -17,18 +17,24 @@ using namespace arma;
 // Any cells older than the cell cycle time undergo division. The two daughter cells have age=0
 // and are always separated by 2* typical cell radius.
 void CellDivision(vector<cell>& Cells,int& Nc,const float& cellradius,const float& cellcycletime){
-  float theta;
-  default_random_engine generator;
+  float theta;                      // Angle of division plane
+  default_random_engine generator;  // Normal distribution for finding division plane angle
   normal_distribution<double> distribution(0.0,0.01);
+  // Loop over all cells in Cells vector.
   for (int ii=0;ii<Nc;ii++){
+    // Test age of each cell in turn. If age is greater than cellcycletime, trigger division.
     if (Cells[ii].age>cellcycletime){
       //theta = 2*M_PI*rand()/RAND_MAX;
-      theta = 2*M_PI*distribution(generator);      
+      // Find division plane angle from normal distribution
+      theta = 2*M_PI*distribution(generator);
+      // Create new cell
       Cells.push_back(cell(Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta)));
+      // Update position and age of existing cell.
       Cells[ii].pos(0) = Cells[ii].pos(0)-cellradius*cos(theta);
       Cells[ii].pos(1) = Cells[ii].pos(1)-cellradius*sin(theta);
       Cells[ii].age = 0;
     }else{}
   }
+  // Update number of cells Nc
   Nc=Cells.size();
 }

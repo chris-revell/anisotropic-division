@@ -12,16 +12,17 @@
 #include <PositionToIndex.hpp>
 #include <armadillo>
 #include <MorseForce.hpp>
+#include <SpringForce.hpp>
 
 using namespace std;
 using namespace arma;
 
-// Subroutine to identify neighbouring cells and calculate forces between them. 
+// Subroutine to identify neighbouring cells and calculate forces between them.
 // For all cells, find corresponding background lattice grid location.
 // Find all cells in all surrounding lattice points.
 // Apply forces between those cells and the cell under consideration.
 // Increment cell age
-void CalculateForces(vector<cell>& Cells,const mat& gridcount,const cube& gridcells,const float& griddim,const int& Ng,const int& Nc,const float& cellcycletime,const float& cellradius,const float& dt){
+void CalculateForces(vector<cell>& Cells,const mat& gridcount,const cube& gridcells,const float& griddim,const int& Ng,const int& Nc,const float& dt,const float& k, const float& gamma){
   int ix,iy;      // Background grid indices
   int ii,jj,kk,ll;// Loop counters
   for (int ii=0;ii<Nc;ii++){
@@ -37,7 +38,7 @@ void CalculateForces(vector<cell>& Cells,const mat& gridcount,const cube& gridce
             // Loop over all cells in neighbouring grid location. Number of cells at location stored in gridcount, labels stored in gridcells.
             if (gridcells(ix+jj,iy+kk,ll)!=ii){ // Do not attempt to find forces between a cell and itself
               // Calculate forces between cell ii and cells in neighbouring grid locations.
-              MorseForce(Cells[ii],Cells[gridcells(ix+jj,iy+kk,ll)],cellcycletime,cellradius);
+              SpringForce(Cells[ii],Cells[gridcells(ix+jj,iy+kk,ll)],k, gamma);
             }else{}
           }
         }

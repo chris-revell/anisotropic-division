@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cell.hpp>
 #include <MorseForce.hpp>
+#include <SpringForce.hpp>
 #include <PositionToIndex.hpp>
 #include <CellDivision.hpp>
 #include <GridUpdate.hpp>
@@ -23,6 +24,8 @@ int main(){
   float griddim       = 1.5*sqrt(2)*cellradius;   // Spatial size of each background grid location
   int Ng              = 512;            // Dimensions of background grid
   int Nc              = 0;              // Number of cells in the system
+  float k             = 1;
+  float gamma         = 1;
   float t             = 0;              // System clock
   float dt            = 0.01;           // Time interval
   float t_max         = 70000;          // Total run time for system
@@ -40,14 +43,13 @@ int main(){
     {
       a = stof(line.substr(0,8));
       b = stof(line.substr(25,8));
-      Cells.push_back(cell(a,b));
-      Cells[Nc].age = fmod(rand(),cellcycletime);
+      Cells.push_back(cell(a,b,cellradius,cellcycletime,fmod(rand(),cellcycletime)));
       Nc++;
     }
     infile.close();
   }else{
     // Initialise Cells vector with initial cell.
-    Cells.push_back(cell(0,0));
+    Cells.push_back(cell(0,0,cellradius,cellcycletime,0));
     Nc=1;
   }
 
@@ -57,13 +59,13 @@ int main(){
 
   while (t<t_max){
     // Divide all cells with age greater than cell cycle time.
-    CellDivision(Cells,Nc,cellradius,cellcycletime);
+    CellDivision(Cells,Nc);
 
     // Update background grid for identifying nearest neighbours.
     GridUpdate(Cells,gridcount,gridcells,Nc,Ng,griddim);
 
     // Calculate forces between identified nearest neighbours and hence cell velocities.
-    CalculateForces(Cells,gridcount,gridcells,griddim,Ng,Nc,cellcycletime,cellradius,dt);
+    CalculateForces(Cells,gridcount,gridcells,griddim,Ng,Nc,dt,k,gamma);
 
     // Output cell positions to file every 100s.
     if (fmod(t,100)<(dt-0.0001)){

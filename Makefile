@@ -1,15 +1,15 @@
-# Compile with Intel c++ compiler
+# Compile anisotropic division model with clang++ compiler
 
-CC := icpc# This is the main compiler
+CC := clang++
 SRCDIR := src
-BUILDDIR := build
-TARGET := anisotropicdivision
-
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+BUILDDIR := build
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -c -Wall -std=c++11 -g -O0 # -Wall
-LIB :=
+TARGET := anisotropicDivision
+#CFLAGS := -c -Wall -std=c++11 -g -O0
+CFLAGS := -c -O3 -std=c++11
+LIB := -larmadillo
 INC := -I include
 
 $(TARGET): $(OBJECTS)
@@ -19,3 +19,7 @@ $(TARGET): $(OBJECTS)
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+clean:
+	@echo " Cleaning...";
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)

@@ -1,4 +1,4 @@
-//
+ //
 //  SpringForce.cpp
 //  anisotropic-division
 //
@@ -22,8 +22,6 @@ void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
   vec F = vec(2,fill::zeros);
   float r;
   float re;                   // Equilibrium separation of Cell1 and Cell2 at current ages.
-  //const float& cellcycletime = Cell1.cellcycletime;
-  //const float& cellradius = Cell1.typicalcellradius;
 
   // Calculate equilibrium radius given ages of two cells.
   Cell1.currentRadius();
@@ -36,19 +34,18 @@ void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
   r = sqrt(dot(dx,dx));
 
   // If the cells are separated by more than 1.5* the equilibrium radius, no force will exist between them.
-  // This step is required because the background grid may find some "neighbours" too far apart for interactions.
-  if (r>1.5*re){
-  }
-  else{
+  //if (r>1.5*re){
+  //}
+  //else{
     // Use distance to evaluate derivative of Morse potential to give force F
-    F = k*(r-re)*dx/r;
+    F = 0.5*k*(r-re)*dx/r;
 
     // Calculate velocity components from force.
-    // Overdamped Langevin => velocity = drag factor * force
-    v = gamma*F;
+    // Overdamped Langevin => velocity = force/drag factor
+    v = F/gamma;
 
     // Velocity components from forces between different cells sum linearly
     Cell1.v = Cell1.v-v;
     Cell2.v = Cell2.v+v;
-  }
+  //}
 }

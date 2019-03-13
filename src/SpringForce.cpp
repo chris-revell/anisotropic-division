@@ -33,10 +33,10 @@ void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
   // Calculate distance between cells from x and y displacements
   r = sqrt(dot(dx,dx));
 
-  // If the cells are separated by more than 1.5* the equilibrium radius, no force will exist between them.
-  //if (r>1.5*re){
-  //}
-  //else{
+  // If the cells are separated by more than 1.1* the equilibrium radius, no force will exist between them.
+  if (r>1.1*re){
+  }
+  else{
     // Use distance to evaluate derivative of Morse potential to give force F
     F = 0.5*k*(r-re)*dx/r;
 
@@ -47,5 +47,5 @@ void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
     // Velocity components from forces between different cells sum linearly
     Cell1.v = Cell1.v-v;
     Cell2.v = Cell2.v+v;
-  //}
+  }
 }

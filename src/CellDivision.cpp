@@ -23,6 +23,7 @@ void CellDivision(vector<cell>& Cells,int& Nc){
   // Loop over all cells in Cells vector.
   for (int ii=0;ii<Nc;ii++){
     // Test age of each cell in turn. If age is greater than cellcycletime, trigger division.
+    int j=0;
     if (Cells[ii].age>Cells[ii].cellcycletime){
       const float& cellradius = Cells[ii].typicalcellradius;
       const float& cellcycletime = Cells[ii].cellcycletime;
@@ -30,11 +31,12 @@ void CellDivision(vector<cell>& Cells,int& Nc){
       // Find division plane angle from normal distribution
       theta = 2*M_PI*distribution(generator);
       // Create new cell
-      Cells.push_back(cell(Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta),cellradius,cellcycletime,0));
+      Cells.push_back(cell(Nc+j,Cells[ii].clone,Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta),cellradius,cellcycletime,0));
       // Update position and age of existing cell.
       Cells[ii].pos(0) = Cells[ii].pos(0)-cellradius*cos(theta);
       Cells[ii].pos(1) = Cells[ii].pos(1)-cellradius*sin(theta);
       Cells[ii].age = 0;
+      j=j+1;
     }else{}
   }
   // Update number of cells Nc

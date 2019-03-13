@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 from scipy.spatial import Voronoi, voronoi_plot_2d
 from matplotlib.patches import Polygon
+from math import sqrt
 
 # Read cell positions from file
 data = np.genfromtxt("output/cellpositions.txt")
@@ -13,6 +14,8 @@ ncells = np.genfromtxt("output/cellcount.txt",dtype=int)
 
 def voronoi_finite_polygons_2d(vor, radius=None):
     """
+    Function from https://stackoverflow.com/questions/20515554/colorize-voronoi-diagram/20678647#20678647
+
     Reconstruct infinite voronoi regions in a 2D diagram to finite
     regions.
 
@@ -97,28 +100,31 @@ def voronoi_finite_polygons_2d(vor, radius=None):
 
 
 
-xmax=50   # Size of plots
+xmax=35   # Size of plots
 drawn = 0 # Counter for how many lines of data have been plotted so far
 for step in range(ncells.shape[0]):
+    stepdata = data[drawn:drawn+ncells[step],:]
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
-    vor = Voronoi(data[drawn:drawn+ncells[step],:2])
-    
+    vor = Voronoi(stepdata[:,:2])
+
     drawn = drawn+ncells[step]
-    # Set plot parameters
-    #ax.set_xlim([-xmax,xmax])
-    #ax.set_ylim([-xmax,xmax])
-    #ax.
-    #ax.
-    # Save plot
-    
-    
+
     # plot
-    regions, vertices = voronoi_finite_polygons_2d(vor,2)    
+    regions, vertices = voronoi_finite_polygons_2d(vor,2)
     # colorize
-    for region in regions:
+    for j,region in enumerate(regions):
         polygon = vertices[region]
-        #print(polygon) 
-        plt.fill(*zip(*polygon))
+        indices = []
+        for i in range(np.shape(polygon)[0]):
+            vec = polygon[i,:2]-stepdata[j,:2]
+            vec_mag = sqrt(np.dot(vec,vec))
+            if vec_mag > 2:
+                #if not (np.min(stepdata[:,0]) < polygon[i,0] < np.max(stepdata[:,0])) or not (np.min(stepdata[:,1]) < polygon[i,1] < np.max(stepdata[:,1])):
+                #indices.append(i)
+                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag
+        #polygon = np.delete(polygon,np.array(indices),0)
+        if stepdata[j,2]==60:
+            plt.fill(*zip(*polygon),color="blue")
         plt.plot(*zip(*polygon),color='black',lw=0.5)
     plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=1)
     #plt.xlim(vor.min_bound[0] - 0.1, vor.max_bound[0] + 0.1)
@@ -131,6 +137,3 @@ for step in range(ncells.shape[0]):
     plt.close()
 # Save plots as animated gif and remove static images.
 os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")
-
-
-

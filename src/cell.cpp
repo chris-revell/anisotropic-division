@@ -12,7 +12,7 @@
 using namespace std;
 using namespace arma;
 
-cell::cell(const float& initialx,const float& initialy,const float& radius,const float& cycletime,const float& initialage) {
+cell::cell(const int& celllabel,const int& parentclone,const float& initialx,const float& initialy,const float& radius,const float& cycletime,const float& initialage) {
   pos = vec(2,fill::zeros);
   v = vec(2,fill::zeros);
   typicalcellradius = radius;
@@ -21,6 +21,8 @@ cell::cell(const float& initialx,const float& initialy,const float& radius,const
   cellradius = radius*sqrt(1+initialage/cycletime);
   pos(0) = initialx;
   pos(1) = initialy;
+  label = celllabel;
+  clone = parentclone;
 }
 
 void cell::currentRadius(void){

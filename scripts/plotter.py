@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy.spatial import Voronoi, voronoi_plot_2d
 
 # Read cell positions from file
 data = np.genfromtxt("output/cellpositions.txt")
@@ -16,7 +17,9 @@ for step in range(ncells.shape[0]):
     # Create new figure for each time point.
     fig, ax = plt.subplots(figsize=(10,10))
     # Plot cell positions corresponding to this time step
-    ax.scatter(data[drawn:drawn+ncells[step],0],data[drawn:drawn+ncells[step],1])
+    #ax.scatter(data[drawn:drawn+ncells[step],0],data[drawn:drawn+ncells[step],1])
+    vor = Voronoi(data[drawn:drawn+ncells[step],:2])
+    voronoi_plot_2d(vor,ax,show_vertices="False")
     drawn = drawn+ncells[step]
     # Set plot parameters
     ax.set_xlim([-xmax,xmax])

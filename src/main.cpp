@@ -24,9 +24,9 @@ int main(){
   float k             = 0.0000001;
   float gamma         = 1;
   float t             = 0;              // System clock
-  float dt            = 0.01;           // Time interval
-  float t_max         = 5000;           // Total run time for system
-  float cellcycletime = 1000;           // Age of cell when division is triggered
+  float dt            = 1;           // Time interval
+  float t_max         = 20000;           // Total run time for system
+  float cellcycletime = 5000;           // Age of cell when division is triggered
   vec zeta = vec(2,fill::randn);
   int init_flag       = 1;    // =1 if reading initial state from file, =0 if starting from 1 cell.
 

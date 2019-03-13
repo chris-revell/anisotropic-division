@@ -15,20 +15,24 @@ using namespace std;
 using namespace arma;
 
 int main(){
+  // Parameters of system
+  float cellradius      = 1;            // Typical cell radius (ie Equilibrium separation for inter-cell interaction of cell with age 0)
+  float k               = 0.0000001;    // Interaction spring constant
+  float gamma           = 1;            // Overdamped Langevin equation drag factor
+  float dt              = 1;            // Time interval
+  float t_max           = 20000;        // Total run time for system
+  float cellcycletime   = 5000;         // Age of cell when division is triggered
+  // Control flags
+  int init_flag         = 1;            // =1 if reading initial state from file, =0 if starting from 1 cell.
+  // Other variable definitions
+  float t               = 0;            // System clock
+  int Nc                = 0;            // Number of cells in the system
   vector<cell> Cells;                   // Vector containing cell objects corresponding to all cells in the system
   ofstream outfile1,outfile2;           // Data file
-  float cellradius    = 1;              // Typical cell radius
-  int Nc              = 0;              // Number of cells in the system
-  float k             = 0.0000001;
-  float gamma         = 1;
-  float t             = 0;              // System clock
-  float dt            = 1;           // Time interval
-  float t_max         = 20000;           // Total run time for system
-  float cellcycletime = 5000;           // Age of cell when division is triggered
   vec zeta = vec(2,fill::randn);
-  int init_flag       = 1;    // =1 if reading initial state from file, =0 if starting from 1 cell.
 
-
+  // Initialise system
+  Initialise(init_flag,Cells,Nc,cellradius,cellcycletime,cellcycletime,outfile1,outfile2)
 
   while (t<t_max){
 

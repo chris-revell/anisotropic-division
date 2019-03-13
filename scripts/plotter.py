@@ -14,7 +14,7 @@ drawn = 0 # Counter for how many lines of data have been plotted so far
 for step in range(ncells.shape[0]):
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
     # Create new figure for each time point.
-    fig, ax = plt.subplots(figsize=(6,6))
+    fig, ax = plt.subplots(figsize=(10,10))
     # Plot cell positions corresponding to this time step
     ax.scatter(data[drawn:drawn+ncells[step],0],data[drawn:drawn+ncells[step],1])
     drawn = drawn+ncells[step]
@@ -24,7 +24,7 @@ for step in range(ncells.shape[0]):
     ax.tick_params(axis='x',which='both',bottom=False,top=False,labelbottom=False)
     ax.tick_params(axis='y',which='both',left=False,right=False,labelleft=False)
     # Save plot
-    fig.savefig("output/test{:05d}".format(step))
+    fig.savefig("output/test{:05d}".format(step),bbox_inches='tight',padding_inches=0,dpi=500)
     plt.close()
 # Save plots as animated gif and remove static images.
 os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")

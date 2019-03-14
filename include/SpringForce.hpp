@@ -12,6 +12,6 @@
 #include <armadillo>
 #include <cell.hpp>
 
-void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma);
+void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma,const float& interactionthreshold);
 
 #endif /* MorseForce_hpp */

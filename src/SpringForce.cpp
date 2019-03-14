@@ -1,4 +1,4 @@
- //
+//
 //  SpringForce.cpp
 //  anisotropic-division
 //
@@ -15,7 +15,7 @@ using namespace arma;
 
 // Subroutine to calculate the force exerted by the Morse potential between two given cells.
 // Equilibrium radius for interaction between cells increases with age of both cells assuming linear growth of cell volume and corresponding increase in typical radius.
-void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
+void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma,const float& interactionthreshold){
 
   vec dx = vec(2,fill::zeros);
   vec v = vec(2,fill::zeros);
@@ -34,7 +34,7 @@ void SpringForce(cell& Cell1,cell& Cell2,const float& k, const float& gamma){
   r = sqrt(dot(dx,dx));
 
   // If the cells are separated by more than 1.1* the equilibrium radius, no force will exist between them.
-  if (r>1.1*re){
+  if (r>interactionthreshold*re){
   }
   else{
     // Use distance to evaluate derivative of Morse potential to give force F

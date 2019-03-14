@@ -118,7 +118,7 @@ for step in range(ncells.shape[0]):
         for i in range(np.shape(polygon)[0]):
             vec = polygon[i,:2]-stepdata[j,:2]
             vec_mag = sqrt(np.dot(vec,vec))
-            if vec_mag > 2:
+            if vec_mag > 4:
                 #if not (np.min(stepdata[:,0]) < polygon[i,0] < np.max(stepdata[:,0])) or not (np.min(stepdata[:,1]) < polygon[i,1] < np.max(stepdata[:,1])):
                 #indices.append(i)
                 polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag
@@ -136,4 +136,4 @@ for step in range(ncells.shape[0]):
     plt.savefig("output/test{:05d}".format(step),bbox_inches='tight',padding_inches=0,dpi=500)
     plt.close()
 # Save plots as animated gif and remove static images.
-os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")
+#os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")

@@ -15,7 +15,7 @@
 using namespace std;
 using namespace arma;
 
-void CalculateForces(vector<cell>& Cells,std::vector<std::size_t>& triangles, const int& Nc,const float& dt,const float& k, const float& gamma){
+void CalculateForces(vector<cell>& Cells,std::vector<std::size_t>& triangles, const int& Nc,const float& dt,const float& k, const float& gamma,const float& interactionthreshold){
 
 
   for(std::size_t i = 0; i < triangles.size(); i+=3) {
@@ -23,9 +23,9 @@ void CalculateForces(vector<cell>& Cells,std::vector<std::size_t>& triangles, co
     cell& b = Cells[triangles[i+1]];
     cell& c = Cells[triangles[i+2]];
 
-    SpringForce(a,b,k,gamma);
-    SpringForce(b,c,k,gamma);
-    SpringForce(c,a,k,gamma);
+    SpringForce(a,b,k,gamma,interactionthreshold);
+    SpringForce(b,c,k,gamma,interactionthreshold);
+    SpringForce(c,a,k,gamma,interactionthreshold);
 
   }
 }

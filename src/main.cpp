@@ -11,31 +11,33 @@
 #include <Initialise.hpp>
 #include <delaunator.hpp>
 #include <CalculateNoise.hpp>
+#include <ReadParameters.hpp>
 
 using namespace std;
 using namespace arma;
 
 int main(){
   // Parameters of system
-  float cellradius           = 1;               // Typical cell radius (ie Equilibrium separation for inter-cell interaction of cell with age 0)
-  float k                    = 0.0000010;       // Interaction spring constant
-  float gamma                = 10;               // Overdamped Langevin equation drag factor
-  float dt                   = 1;               // Time interval  
-  float cellcycletime        = 5000;            // Age of cell when division is triggered
-  float t_max                = 50*cellcycletime;// Total run time for system
-  float interactionthreshold = 1.4;             // Distance threshold for interactions as a proportion of equilibrium distance
-  float zeta_mag             = 10.0;             // Magnitude of stochastic component
+  float cellradius;           // Typical cell radius (ie Equilibrium separation for inter-cell interaction of cell with age 0)
+  float k;                    // Interaction spring constant
+  float gamma;                // Overdamped Langevin equation drag factor
+  float dt;                   // Time interval
+  float cellcycletime;        // Age of cell when division is triggered
+  float t_max;                // Total run time for system
+  float interactionthreshold; // Distance threshold for interactions as a proportion of equilibrium distance
+  float zeta_mag;             // Magnitude of stochastic component
   // Control flags
-  int init_flag              = 0;               // =1 if reading initial state from file, =0 if starting from 1 cell.
-  int output_flag            = 1;               // if =0 data output only at final state, otherwise at every output_interval.
-  float output_interval      = t_max/10;
+  int init_flag;              // =1 if reading initial state from file, =0 if starting from 1 cell.
+  int output_flag;            // if =0 data output only at final state, otherwise at every output_interval.
+  float output_interval;      
   // Other variable definitions
-  float t                    = 0;               // System clock
-  int Nc                     = 0;               // Number of cells in the system
-  vector<cell> Cells;                           // Vector containing cell objects corresponding to all cells in the system
-  ofstream outfile1,outfile2;                   // Data file
+  float t = 0;                // System clock
+  int Nc = 0;                 // Number of cells in the system
+  vector<cell> Cells;        // Vector containing cell objects corresponding to all cells in the system
+  ofstream outfile1,outfile2;// Data file
 
   // Initialise system
+  ReadParameters(cellradius,k,gamma,dt,cellcycletime,t_max,interactionthreshold,zeta_mag,init_flag,output_flag,output_interval);
   Initialise(init_flag,Cells,Nc,cellradius,cellcycletime,outfile1,outfile2);
 
   while (t<t_max){
@@ -56,7 +58,7 @@ int main(){
 
     // Update all cell positions according to cell velocities and increment cell age
     for (int ii=0;ii<Nc;ii++){
-      Cells[ii].pos = Cells[ii].pos+dt*Cells[ii].v;      
+      Cells[ii].pos = Cells[ii].pos+dt*Cells[ii].v;
       Cells[ii].age = Cells[ii].age+dt;
     }
 
@@ -84,7 +86,6 @@ int main(){
   }
   // Write cell count at this time interval to file
   outfile2 << Nc << endl;
-  
+
   return 0;
 }
-

@@ -34,9 +34,11 @@ void Initialise(const int& init_flag, vector<cell>& Cells, int& Nc,const float& 
     Cells.push_back(cell(1,1,0,1,cellradius,cellcycletime,0));
     Cells.push_back(cell(2,2,0,-1,cellradius,cellcycletime,0));
     Nc=3;
-  }else{
-    Nc = 50.0*50.0*2/(M_PI*cellradius*cellradius);
-      // The following 0-1 random number generator from https://stackoverflow.com/questions/9878965/rand-between-0-and-1
+  }else if (init_flag==0){
+    // Set number of cells such that cell volume roughly fills 50x50 space.
+    Nc = 100*100/(M_PI*pow(1.5*cellradius,2));
+    
+    // The following 0-1 random number generator from https://stackoverflow.com/questions/9878965/rand-between-0-and-1
       std::mt19937_64 rng;
       // initialize the random number generator with time-dependent seed
       uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -47,6 +49,7 @@ void Initialise(const int& init_flag, vector<cell>& Cells, int& Nc,const float& 
       float posx,posy,ranage;
       // ready to generate random numbers
     //
+
     for (int i = 0; i < Nc; ++i)
     {
       posx = 100*unif(rng)-50;
@@ -54,6 +57,28 @@ void Initialise(const int& init_flag, vector<cell>& Cells, int& Nc,const float& 
       ranage = cellcycletime*unif(rng);
       Cells.push_back(cell(i,i,posx,posy,cellradius,cellcycletime,ranage));
     }
+  //}else{
+  //  Nc = pow(100,2)/pow(1.5*cellradius,2));
+  //  
+  //  // The following 0-1 random number generator from https://stackoverflow.com/questions/9878965/rand-between-0-and-1
+  //    std::mt19937_64 rng;
+  //    // initialize the random number generator with time-dependent seed
+  //    uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+  //    std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
+  //    rng.seed(ss);
+  //    // initialize a uniform distribution between 0 and 1
+  //    std::uniform_real_distribution<float> unif(0, 1);
+  //    float theta,rad,ranage;
+  //    // ready to generate random numbers
+  //  //
+
+  //  for (int i = 0; i < Nc; ++i)
+  //  {
+  //    theta = 2*M_PI*unif(rng);
+  //    rad = 100*pow(unif(rng),2);
+  //    ranage = cellcycletime*unif(rng);
+  //    Cells.push_back(cell(i,i,rad*,posy,cellradius,cellcycletime,ranage));
+  //  }
   }
 
   // Open data output files.

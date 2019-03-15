@@ -105,35 +105,26 @@ drawn = 0 # Counter for how many lines of data have been plotted so far
 for step in range(ncells.shape[0]):
     stepdata = data[drawn:drawn+ncells[step],:]
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
-    vor = Voronoi(stepdata[:,:2])
-
-    drawn = drawn+ncells[step]
-
-    # plot
+    vor = Voronoi(stepdata[:,:2])    
     regions, vertices = voronoi_finite_polygons_2d(vor,2)
-    # colorize
     for j,region in enumerate(regions):
         polygon = vertices[region]
         indices = []
         for i in range(np.shape(polygon)[0]):
             vec = polygon[i,:2]-stepdata[j,:2]
             vec_mag = sqrt(np.dot(vec,vec))
-            if vec_mag > 4:
-                #if not (np.min(stepdata[:,0]) < polygon[i,0] < np.max(stepdata[:,0])) or not (np.min(stepdata[:,1]) < polygon[i,1] < np.max(stepdata[:,1])):
-                #indices.append(i)
-                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag
-        #polygon = np.delete(polygon,np.array(indices),0)
+            if vec_mag > 4:                
+                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag        
         if stepdata[j,2]==60:
             plt.fill(*zip(*polygon),color="blue")
         plt.plot(*zip(*polygon),color='black',lw=0.5)
-    plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=1)
-    #plt.xlim(vor.min_bound[0] - 0.1, vor.max_bound[0] + 0.1)
-    #plt.ylim(vor.min_bound[1] - 0.1, vor.max_bound[1] + 0.1)
+    plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=1)        
     plt.xlim([-xmax,xmax])
     plt.ylim([-xmax,xmax])
     plt.tick_params(axis='x',which='both',bottom=False,top=False,labelbottom=False)
     plt.tick_params(axis='y',which='both',left=False,right=False,labelleft=False)
-    plt.savefig("output/test{:05d}".format(step),bbox_inches='tight',padding_inches=0,dpi=500)
+    plt.savefig("output/voronoi{:05d}".format(step),bbox_inches='tight',padding_inches=0,dpi=500)
     plt.close()
+    drawn = drawn+ncells[step]
 # Save plots as animated gif and remove static images.
-#os.system("convert -delay 10 -loop 0 output/*.png output/animated.gif;rm output/*.png")
+#os.system("convert -delay 10 -loop 0 output/voronoi*.png output/animated.gif;rm output/*.png")

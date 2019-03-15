@@ -1,0 +1,11 @@
+cellradius           = 1
+k                    = 0.0000001
+gamma                = 1000
+dt                   = 1
+cellcycletime        = 5000
+t_max                = 500000
+interactionthreshold = 10.2
+zeta_mag             = 0.0001
+init_flag            = 0
+output_flag          = 1
+output_interval      = 50000

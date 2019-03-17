@@ -12,6 +12,7 @@
 #include <delaunator.hpp>
 #include <CalculateNoise.hpp>
 #include <ReadParameters.hpp>
+#include <CellDeath.hpp>
 
 using namespace std;
 using namespace arma;
@@ -43,7 +44,10 @@ int main(){
   while (t<t_max){
 
     // Divide all cells with age greater than cell cycle time.
-    //CellDivision(Cells,Nc);
+    CellDivision(Cells,Nc);
+
+    // Some cells die
+    CellDeath(Cells,Nc,dt,cellcycletime);
 
     // Calculate forces between identified nearest neighbours and hence cell velocities.
     vector<double> coords;

@@ -20,11 +20,10 @@ void ReadParameters(float& cellradius,float& k,float& gamma,float& dt,float& cel
 	string input;
 	float value;
 	ifstream infile("input/parameters.txt");
-	
+
 	while(infile.ignore(max,' ') >> input >> value)
 	{
 	    values.push_back(value);
-	    cout << value << endl;
 	}
 
 	cellradius = values[0];

@@ -34,7 +34,5 @@
 *.png
 *.gif
 output/*
-anisotropicdivision
-anisotropicdivision
-anisotropicdivision
+./anisotropicdivision
 anisotropicdivision

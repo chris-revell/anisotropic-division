@@ -29,7 +29,7 @@ int main(){
   // Control flags
   int init_flag;              // =1 if reading initial state from file, =0 if starting from 1 cell.
   int output_flag;            // if =0 data output only at final state, otherwise at every output_interval.
-  float output_interval;      
+  float output_interval;
   // Other variable definitions
   float t = 0;                // System clock
   int Nc = 0;                 // Number of cells in the system
@@ -39,6 +39,19 @@ int main(){
   // Initialise system
   ReadParameters(cellradius,k,gamma,dt,cellcycletime,t_max,interactionthreshold,zeta_mag,init_flag,output_flag,output_interval);
   Initialise(init_flag,Cells,Nc,cellradius,cellcycletime,outfile1,outfile2);
+
+  cout << "cellradius " << cellradius << endl;           // Typical cell radius (ie Equilibrium separation for inter-cell interaction of cell with age 0)
+  cout << "k " << k << endl;                    // Interaction spring constant
+  cout << "gamma " << gamma << endl;                // Overdamped Langevin equation drag factor
+  cout << "dt " << dt << endl;                   // Time interval
+  cout << "cellcycletime " << cellcycletime << endl;        // Age of cell when division is triggered
+  cout << "t_max " << t_max << endl;                // Total run time for system
+  cout << "interactionthreshold " << interactionthreshold << endl; // Distance threshold for interactions as a proportion of equilibrium distance
+  cout << "zeta_mag " << zeta_mag << endl;             // Magnitude of stochastic component
+  // Control flags
+  cout << "init_flag " << init_flag << endl;              // =1 if reading initial state from file, =0 if starting from 1 cell.
+  cout << "output_flag " << output_flag << endl;            // if =0 data output only at final state, otherwise at every output_interval.
+  cout << "output_interval " << output_interval << endl;
 
   while (t<t_max){
 

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from scipy.spatial import Voronoi, voronoi_plot_2d, Delaunay
 from matplotlib.patches import Polygon
 from math import sqrt
 
@@ -106,24 +106,28 @@ for step in range(ncells.shape[0]):
     stepdata = data[drawn:drawn+ncells[step],:]
     print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
     vor = Voronoi(stepdata[:,:2])    
+    tri = Delaunay(stepdata[:,:2])
     regions, vertices = voronoi_finite_polygons_2d(vor,2)
-    for j,region in enumerate(regions):
-        polygon = vertices[region]
-        indices = []
-        for i in range(np.shape(polygon)[0]):
-            vec = polygon[i,:2]-stepdata[j,:2]
-            vec_mag = sqrt(np.dot(vec,vec))
-            if vec_mag > 4:                
-                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag        
-        if stepdata[j,2]==60:
-            plt.fill(*zip(*polygon),color="blue")
-        plt.plot(*zip(*polygon),color='black',lw=0.5)
-    plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=1)        
+    #for j,region in enumerate(regions):
+    #    polygon = vertices[region]
+    #    indices = []
+    #    for i in range(np.shape(polygon)[0]):
+    #        vec = polygon[i,:2]-stepdata[j,:2]
+    #        vec_mag = sqrt(np.dot(vec,vec))
+    #        if vec_mag > 4:                
+    #            polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag        
+    #    if stepdata[j,2]==60:
+    #        plt.fill(*zip(*polygon),color="blue")
+    #    else:
+    #        plt.fill(*zip(*polygon),edgecolor='black',fill=False)
+    #    #plt.plot(*zip(*polygon),color='black',lw=0.5)
+    plt.triplot(stepdata[:,0], stepdata[:,1], tri.simplices.copy(),color="black")
+    plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=2,color='red')        
     plt.xlim([-xmax,xmax])
     plt.ylim([-xmax,xmax])
     plt.tick_params(axis='x',which='both',bottom=False,top=False,labelbottom=False)
     plt.tick_params(axis='y',which='both',left=False,right=False,labelleft=False)
-    plt.savefig("output/voronoi{:05d}".format(step),bbox_inches='tight',padding_inches=0,dpi=500)
+    plt.savefig("output/Delaunay{:05d}.svg".format(step),bbox_inches='tight',padding_inches=0,dpi=500,format='svg')
     plt.close()
     drawn = drawn+ncells[step]
 # Save plots as animated gif and remove static images.

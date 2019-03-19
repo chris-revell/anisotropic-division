@@ -15,7 +15,7 @@
 #include <cell.hpp>
 #include <random>
 
-void Initialise(const int& init_flag, std::vector<cell>& Cells, int& Nc,const float& cellradius,const float& cellcycletime,std::ofstream& outfile1,std::ofstream& outfile2);
+void Initialise(const int& init_flag, std::vector<cell>& Cells, int& Nc, int& NcT,const float& cellradius,const float& cellcycletime,std::ofstream& outfile1,std::ofstream& outfile2);
 
 
 #endif /* Initialise_hpp */

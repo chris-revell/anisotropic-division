@@ -34,20 +34,21 @@ int main(){
   // Other variable definitions
   float t = 0;                // System clock
   int Nc = 0;                 // Number of cells in the system
-  vector<cell> Cells;        // Vector containing cell objects corresponding to all cells in the system
-  ofstream outfile1,outfile2;// Data file
+  int NcT = 0;                // Tracks total number of cells that have ever existed for labelling purposes.
+  vector<cell> Cells;         // Vector containing cell objects corresponding to all cells in the system
+  ofstream outfile1,outfile2; // Data file
 
   // Initialise system
   ReadParameters(cellradius,k,gamma,dt,cellcycletime,t_max,interactionthreshold,zeta_mag,init_flag,output_flag,output_interval);
-  Initialise(init_flag,Cells,Nc,cellradius,cellcycletime,outfile1,outfile2);
+  Initialise(init_flag,Cells,Nc,NcT,cellradius,cellcycletime,outfile1,outfile2);
 
   while (t<t_max){
 
     // Divide all cells with age greater than cell cycle time.
-    CellDivision(Cells,Nc);
+    CellDivision(Cells,Nc,NcT);
 
     // Some cells die
-    CellDeath(Cells,Nc,dt,cellcycletime);
+    //CellDeath(Cells,Nc,dt,cellcycletime);
 
     // Calculate forces between identified nearest neighbours and hence cell velocities.
     vector<double> coords;

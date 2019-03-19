@@ -99,13 +99,12 @@ def voronoi_finite_polygons_2d(vor, radius=None):
 
 
 
-
+os.system("rm output/voronoi*.png")
 xmax=35   # Size of plots
 drawn = 0 # Counter for how many lines of data have been plotted so far
 for step in range(ncells.shape[0]):
     stepdata = data[drawn:drawn+ncells[step],:]
-    print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
-    vor = Voronoi(stepdata[:,:2])    
+    vor = Voronoi(stepdata[:,:2])
     #tri = Delaunay(stepdata[:,:2])
     regions, vertices = voronoi_finite_polygons_2d(vor,2)
     for j,region in enumerate(regions):
@@ -114,15 +113,15 @@ for step in range(ncells.shape[0]):
         for i in range(np.shape(polygon)[0]):
             vec = polygon[i,:2]-stepdata[j,:2]
             vec_mag = sqrt(np.dot(vec,vec))
-            if vec_mag > 4:                
-                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag        
-        if stepdata[j,2]==60:
-            plt.fill(*zip(*polygon),color="blue")
+            if vec_mag > 4:
+                polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag
+        if stepdata[j,2]==30:
+            plt.fill(*zip(*polygon),color="blue",edgecolor='black')
         else:
-            plt.fill(*zip(*polygon),edgecolor='black',fill=False)
+            plt.fill(*zip(*polygon),edgecolor='black',color='grey',alpha=0.5)
         #plt.plot(*zip(*polygon),color='black',lw=0.5)
     #plt.triplot(stepdata[:,0], stepdata[:,1], tri.simplices.copy(),color="black")
-    plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=2,color='red')        
+    #plt.plot(data[drawn:drawn+ncells[step],0], data[drawn:drawn+ncells[step],1], 'ko',ms=2,color='red')
     plt.xlim([-xmax,xmax])
     plt.ylim([-xmax,xmax])
     plt.tick_params(axis='x',which='both',bottom=False,top=False,labelbottom=False)
@@ -130,5 +129,6 @@ for step in range(ncells.shape[0]):
     plt.savefig("output/voronoi{:05d}.png".format(step),bbox_inches='tight',padding_inches=0,dpi=500,format='png')
     plt.close()
     drawn = drawn+ncells[step]
+    print("{:02d}/{:02d}".format((step+1),ncells.shape[0]))
 # Save plots as animated gif and remove static images.
 #os.system("convert -delay 10 -loop 0 output/voronoi*.png output/animated.gif;rm output/*.png")

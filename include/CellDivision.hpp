@@ -13,6 +13,6 @@
 #include <cell.hpp>
 
 // Subroutine to test all cells in vector Cells and determine whether any are older than the cell cycle time.
-void CellDivision(std::vector<cell>& Cells,int& Nc);
+void CellDivision(std::vector<cell>& Cells,int& Nc,int& NcT);
 
 #endif /* CellDivision_hpp */

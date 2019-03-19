@@ -31,7 +31,7 @@ void ReadParameters(float& cellradius,float& k,float& gamma,float& dt,float& cel
 	gamma = values[2];
 	dt = values[3];
 	cellcycletime = values[4];
-	t_max = values[5];
+	t_max = cellcycletime*values[5];
 	interactionthreshold = values[6];
 	zeta_mag = values[7];
 	init_flag = values[8];

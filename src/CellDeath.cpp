@@ -27,12 +27,23 @@ void CellDeath(vector<cell>& Cells, int& Nc, const float& dt, const float& cellc
 		double currentRandomNumber;
 		// ready to generate random numbers
 	//
+	int numberToErase = 0;
+	vector<int> indicesToErase;
 
-	for (int ii; ii<Nc; ii++){	
-		currentRandomNumber = unif(rng);
-		if (currentRandomNumber < dt/cellcycletime){
-			Cells.erase(Cells.begin()+ii);
-			Nc = Nc-1;
+	for (int ii=0; ii<Nc; ii++){	
+		currentRandomNumber = unif(rng);	
+		if (currentRandomNumber < 0.5*dt/cellcycletime){
+			indicesToErase.push_back(ii);
+			numberToErase++;
 		}
 	}
+
+	if (numberToErase > 0){
+		for (int jj = numberToErase-1; jj>=0; jj--){				
+			Cells.erase(Cells.begin()+indicesToErase[jj]);
+		}
+	}else{}
+
+	Nc = Cells.size();
+	
 }

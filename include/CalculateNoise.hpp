@@ -7,7 +7,7 @@
 //
 
 #ifndef NOISE_HPP
-#define NOISE_HPP 
+#define NOISE_HPP
 
 
 #include <armadillo>
@@ -16,7 +16,7 @@
 #include <cell.hpp>
 #include <vector>
 
-void CalculateNoise(std::vector<cell> Cells, const float& zeta_mag);
+void CalculateNoise(std::vector<cell>& Cells, const float& zeta_mag, const float& gamma);
 
 
 #endif

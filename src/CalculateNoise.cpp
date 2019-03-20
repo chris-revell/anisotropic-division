@@ -16,8 +16,8 @@
 using namespace std;
 using namespace arma;
 
-void CalculateNoise(vector<cell> Cells, const float& zeta_mag){
-	
+void CalculateNoise(vector<cell>& Cells, const float& zeta_mag, const float& gamma){
+
 	float mean = 0.0;
 	float stddev = 1;
 	vec zeta = vec(2,fill::zeros);                // Vector for stochastic component
@@ -39,6 +39,6 @@ void CalculateNoise(vector<cell> Cells, const float& zeta_mag){
 	  currentRandomNumber = unif(rng);
 	  zeta(0) = cos(2*M_PI*currentRandomNumber);
 	  zeta(1) = sin(2*M_PI*currentRandomNumber);
-		Cells[ii].v = Cells[ii].v + zeta_mag*abs(dist(generator))*zeta;		
+		Cells[ii].v = Cells[ii].v + zeta_mag*abs(dist(generator))*zeta/gamma;
 	}
 }

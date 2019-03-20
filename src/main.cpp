@@ -13,6 +13,7 @@
 #include <CalculateNoise.hpp>
 #include <ReadParameters.hpp>
 #include <CellDeath.hpp>
+#include <OutputData.hpp>
 
 using namespace std;
 using namespace arma;
@@ -48,7 +49,7 @@ int main(){
     CellDivision(Cells,Nc,NcT);
 
     // Some cells die
-    //CellDeath(Cells,Nc,dt,cellcycletime);
+    CellDeath(Cells,Nc,dt,cellcycletime);
 
     // Calculate forces between identified nearest neighbours and hence cell velocities.
     vector<double> coords;
@@ -59,23 +60,18 @@ int main(){
     delaunator::Delaunator triangulation(coords);
     CalculateForces(Cells,triangulation.triangles,Nc,dt,k,gamma,interactionthreshold);
 
-    CalculateNoise(Cells,zeta_mag);
+    CalculateNoise(Cells,zeta_mag,gamma);
 
     // Update all cell positions according to cell velocities and increment cell age
     for (int ii=0;ii<Nc;ii++){
       Cells[ii].pos = Cells[ii].pos+dt*Cells[ii].v;
       Cells[ii].age = Cells[ii].age+dt;
+      Cells[ii].v.zeros();
     }
 
     // Output cell positions to file every 100s.
     if ((fmod(t,output_interval)<(dt-0.0001)) && (output_flag==1)){
-      cout << t << endl;
-      // Write positions to file
-      for (int ii=0;ii<Nc;ii++){
-        outfile1 << Cells[ii].pos(0) << " " << Cells[ii].pos(1) << " " << Cells[ii].clone << endl;
-      }
-      // Write cell count at this time interval to file
-      outfile2 << Nc << endl;
+      OutputData(Cells,t,Nc,outfile1,outfile2);
     }
 
     // Increment time and write time to command line
@@ -84,13 +80,7 @@ int main(){
   }
 
   // Final data output
-  cout << t << endl;
-  // Write positions to file
-  for (int ii=0;ii<Nc;ii++){
-    outfile1 << Cells[ii].pos(0) << " " << Cells[ii].pos(1) << " " << Cells[ii].clone << endl;
-  }
-  // Write cell count at this time interval to file
-  outfile2 << Nc << endl;
+  OutputData(Cells,t,Nc,outfile1,outfile2);
 
   return 0;
 }

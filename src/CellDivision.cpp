@@ -28,7 +28,7 @@ void CellDivision(vector<cell>& Cells,int& Nc,int& NcT){
       const float& cellcycletime = Cells[ii].cellcycletime;
       //theta = 2*M_PI*rand()/RAND_MAX;
       // Find division plane angle from normal distribution
-      theta = 2*M_PI*distribution(generator);
+      theta = M_PI*distribution(generator)+M_PI/2.0;
       // Create new cell
       Cells.push_back(cell(NcT,Cells[ii].clone,Cells[ii].pos(0)+cellradius*cos(theta),Cells[ii].pos(1)+cellradius*sin(theta),cellradius,cellcycletime,0));
       // Update position and age of existing cell.

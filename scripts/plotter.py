@@ -119,7 +119,7 @@ for step in range(ncells.shape[0]):
             vec_mag = sqrt(np.dot(vec,vec))
             if vec_mag > 4:
                 polygon[i,:2] = stepdata[j,:2] + 2*vec/vec_mag
-        if stepdata[j,2]==20:
+        if stepdata[j,2]==36:
             plt.fill(*zip(*polygon),color="blue",edgecolor='black')
         else:
             plt.fill(*zip(*polygon),edgecolor='black',color='grey',alpha=0.5)

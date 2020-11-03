@@ -58,6 +58,7 @@ int main(){
       coords.push_back(static_cast<double>(Cells[ii].pos(1)));
     }
     delaunator::Delaunator triangulation(coords);
+  
     CalculateForces(Cells,triangulation.triangles,Nc,dt,k,gamma,interactionthreshold);
 
     CalculateNoise(Cells,zeta_mag,gamma);
